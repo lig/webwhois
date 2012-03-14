@@ -1,7 +1,6 @@
 import whois
 
 from pynta.apps import PyntaApp
-from pynta.storage import Mongodb
 from pynta.templates import Mako
 
 
@@ -12,7 +11,6 @@ class Application(PyntaApp):
     )
 
     templates = Mako
-    storage = Mongodb
 
     class templates_settings:
         template = 'index.html'
