@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Domain availability service</title>
+</head>
+
+<body>
+
+<form method="post">
+<textarea name="domain_list"></textarea>
+<input type="submit">
+</form>
+
+% if result:
+	<table>
+	% for domain, status in result:
+		<tr>
+			<td>${domain}</td>
+			% if status:
+				<td style="color: red;">taken</td>
+			% else:
+				<td style="color: green;">available</td>
+			% endif
+		</tr>
+	% endfor
+	</table>
+% endif
+
+</body>
+
+</html>
