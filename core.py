@@ -7,7 +7,7 @@ from pynta.templates import Mako
 class Application(PyntaApp):
 
     urls = (
-        (r'^$', 'self', {}, 'hello'),
+        (r'^$', 'self', {}, 'index'),
     )
 
     templates = Mako
