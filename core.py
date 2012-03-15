@@ -1,7 +1,11 @@
+from collections import OrderedDict
+
 import whois
 
 from pynta.apps import PyntaApp
 from pynta.templates import Mako
+
+TLDS = ['com', 'ru', 'su']
 
 
 class Application(PyntaApp):
@@ -17,7 +21,10 @@ class Application(PyntaApp):
 
 
     def get(self):
-        return {}
+        tlds = OrderedDict.fromkeys(TLDS, False)
+        tlds.update({'com': True, 'ru': True})
+        return {'tlds': tlds}
+
 
     def post(self):
         names = self.request.POST['domain_list'].replace(',', '').split()
@@ -31,8 +38,8 @@ class Application(PyntaApp):
         for domain in domains:
             result.append((domain, bool(whois.query(str(domain)))))
 
-        tlds = {}
-        for tld in ['ru', 'su', 'com']:
+        tlds = OrderedDict()
+        for tld in TLDS:
             tlds.update({tld: tld in tld_list})
 
         return {'result': result, 'tlds': tlds}
