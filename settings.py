@@ -16,6 +16,7 @@ STORAGE_MONGODB = {
 
 TEMPLATES_MAKO = {
     'directories': os.path.join(PROJECT_ROOT, 'templates'),
+    'input_encoding': 'utf-8',
 }
 
 SESSION_STORAGE = 'pynta.storage.Mongodb'

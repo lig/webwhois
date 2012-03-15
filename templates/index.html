@@ -3,29 +3,50 @@
 
 <head>
 <title>Domain availability service</title>
+<link rel="stylesheet" href="/media/css/bootstrap.min.css">
+<script type="text/javascript" src="/media/js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-<form method="post">
-<textarea name="domain_list"></textarea>
-<input type="submit">
-</form>
+<div class="container">
 
-% if result:
-	<table>
-	% for domain, status in result:
-		<tr>
-			<td>${domain}</td>
-			% if status:
-				<td style="color: red;">taken</td>
-			% else:
-				<td style="color: green;">available</td>
-			% endif
-		</tr>
+	<header>
+	    <h1>&nbsp;</h1>
+	    <p class="lead">Подбор доменных имен</p>
+	</header>
+
+    % if result:
+        <table class="table well">
+        % for domain, status in result:
+            <tr>
+                <td>${domain}</td>
+                % if status:
+                    <td style="color: red;">taken</td>
+                % else:
+                    <td style="color: green;">available</td>
+                % endif
+            </tr>
+        % endfor
+        </table>
+    % endif
+
+	<form method="post">
+	<label for="domain_list">Введите интересующие вас имена</label>
+	<textarea class="input-xlarge" name="domain_list" rows="8"></textarea>
+	<p class="help-block">Доменные имена можно разделять запятыми и/или пробелами и/или располагать на отдельных строках</p>
+	<label for="tld_list">Выберите зоны, в которых нужно осуществить проверку</label>
+	% for tld in tlds:
+	    % if tlds[tld]:
+	    <label class="checkbox"><input type="checkbox" name="tld_list" value="${tld}" checked="checked">.${tld}</label>
+	    % else:
+        <label class="checkbox"><input type="checkbox" name="tld_list" value="${tld}">.${tld}</label>
+	    % endif
 	% endfor
-	</table>
-% endif
+	<input class="btn" type="submit">
+	</form>
+
+</div>
 
 </body>
 

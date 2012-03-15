@@ -22,10 +22,19 @@ class Application(PyntaApp):
         return {}
 
     def post(self):
-        domains = self.request.POST['domain_list'].replace(',', '').split()
+        names = self.request.POST['domain_list'].replace(',', '').split()
+        tld_list = self.request.POST.getall('tld_list')
+        
+        domains = []
+        for name in names:
+            domains.extend('%s.%s' % (name, tld) for tld in tld_list)
 
-        result= []
+        result = []
         for domain in domains:
             result.append((domain, bool(whois.query(str(domain)))))
 
-        return {'result': result}
+        tlds = {}
+        for tld in ['ru', 'su', 'com']:
+            tlds.update({tld: tld in tld_list})
+
+        return {'result': result, 'tlds': tlds}
