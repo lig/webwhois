@@ -5,7 +5,7 @@ import whois
 from pynta.apps import PyntaApp
 from pynta.templates import Mako
 
-TLDS = ['com', 'ru', 'su']
+TLDS = ['com', 'ru']
 
 
 class Application(PyntaApp):
@@ -30,16 +30,18 @@ class Application(PyntaApp):
         names = self.request.POST['domain_list'].replace(',', '').split()
         tld_list = self.request.POST.getall('tld_list')
         
-        domains = []
-        for name in names:
-            domains.extend('%s.%s' % (name, tld) for tld in tld_list)
-
-        result = []
-        for domain in domains:
-            result.append((domain, bool(whois.query(str(domain)))))
-
+        result = {}
         tlds = OrderedDict()
+
         for tld in TLDS:
             tlds.update({tld: tld in tld_list})
 
-        return {'result': result, 'tlds': tlds}
+            if tlds[tld]:
+
+                for name in names:
+                    domain_tup = (name, tld)
+                    result.update(
+                        {domain_tup:
+                            bool(whois.query(str('%s.%s' % domain_tup)))})
+
+        return {'result': result, 'names': names, 'tlds': tlds}

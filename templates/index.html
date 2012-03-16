@@ -18,14 +18,26 @@
 
     % if result:
         <table class="table well">
-        % for domain, status in result:
             <tr>
-                <td>${domain}</td>
-                % if status:
-                    <td style="color: red;">taken</td>
-                % else:
-                    <td style="color: green;">available</td>
-                % endif
+                <th></th>
+	            % for tld in tlds:
+	                % if tlds[tld]:
+                        <th>.${tld}</th>
+	                % endif
+	            % endfor
+            </tr>
+        % for name in names:
+            <tr>
+                <td>${name}</td>
+                % for tld in tlds:
+                    % if tlds[tld]:
+		                % if result[(name, tld)]:
+		                    <td style="color: red;">taken</td>
+		                % else:
+		                    <td style="color: green;">available</td>
+		                % endif
+                    % endif
+                % endfor
             </tr>
         % endfor
         </table>
@@ -33,7 +45,13 @@
 
 	<form method="post">
 	<label for="domain_list">Введите интересующие вас имена</label>
-	<textarea class="input-xlarge" name="domain_list" rows="8"></textarea>
+<textarea class="input-xlarge" name="domain_list" rows="8">
+% if names:
+% for name in names:
+${name}
+% endfor
+% endif
+</textarea>
 	<p class="help-block">Доменные имена можно разделять запятыми и/или пробелами и/или располагать на отдельных строках</p>
 	<label for="tld_list">Выберите зоны, в которых нужно осуществить проверку</label>
 	% for tld in tlds:
